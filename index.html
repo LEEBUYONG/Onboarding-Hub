@@ -1,0 +1,1156 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>AX교육팀 상시 온보딩 허브 (초안)</title>
+<style>
+/* ---------- 디자인 토큰 ---------- */
+:root{
+  --bg:#f6f7f9; --surface:#ffffff; --surface-2:#f0f2f5; --border:#e3e6ea;
+  --text:#15171a; --muted:#5f6670; --faint:#9aa1aa;
+  --brand:#e8344e; --brand-weak:#fdecef; --brand-text:#c81f39;
+  --ok:#1f9d55; --ok-weak:#e6f6ec; --warn:#b7791f; --warn-weak:#fff6e0; --lock:#8a919b;
+  --shadow:0 1px 2px rgba(0,0,0,.05),0 6px 20px rgba(0,0,0,.05);
+  --radius:14px; --radius-s:9px;
+  --font:"Pretendard","Apple SD Gothic Neo","Noto Sans KR",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1114; --surface:#181b20; --surface-2:#20242b; --border:#2b3038;
+    --text:#eef0f3; --muted:#a7afb9; --faint:#6b7380;
+    --brand:#ff5a71; --brand-weak:#3a1a21; --brand-text:#ff8294;
+    --ok:#3dcc7a; --ok-weak:#163322; --warn:#e2a93b; --warn-weak:#3a2e12; --lock:#6b7380;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f1114; --surface:#181b20; --surface-2:#20242b; --border:#2b3038;
+  --text:#eef0f3; --muted:#a7afb9; --faint:#6b7380;
+  --brand:#ff5a71; --brand-weak:#3a1a21; --brand-text:#ff8294;
+  --ok:#3dcc7a; --ok-weak:#163322; --warn:#e2a93b; --warn-weak:#3a2e12; --lock:#6b7380;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
+}
+
+/* ---------- 기본 ---------- */
+*{box-sizing:border-box}
+html{color-scheme:light}
+@media (prefers-color-scheme: dark){ html:not([data-theme="light"]){color-scheme:dark} }
+html[data-theme="dark"]{color-scheme:dark}
+html,body{margin:0;padding:0}
+button,summary,details,.step,.quick,.check{color:var(--text)}
+/* 문서 체크 행 */
+.doc{display:flex;gap:12px;align-items:center;padding:12px 14px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+.doc.read{background:var(--ok-weak);border-color:var(--ok)}
+.doc .t{flex:1;min-width:0}
+.doc .t b{display:block;font-size:14px}
+.doc .t span{font-size:12px;color:var(--muted)}
+.doc label{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
+.doc input{width:18px;height:18px;accent-color:var(--ok)}
+.qlist{list-style:none;padding:0;margin:0}
+.qlist li{padding:8px 0;border-top:1px solid var(--border);font-size:14px}
+.qlist li:first-child{border-top:0}
+.qlist .ans{color:var(--ok);font-weight:700}
+.qlist .ch{color:var(--muted);font-size:13px;margin:2px 0 0 12px}
+body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--brand-text);text-decoration:none}
+a:hover{text-decoration:underline}
+button{font:inherit;cursor:pointer}
+h1,h2,h3,h4{margin:0;line-height:1.3;letter-spacing:-.01em}
+h1{font-size:26px;font-weight:800}
+h2{font-size:20px;font-weight:700}
+h3{font-size:16px;font-weight:700}
+p{margin:0}
+ul{margin:0;padding-left:18px}
+li{margin:4px 0}
+.muted{color:var(--muted)}
+.faint{color:var(--faint)}
+.small{font-size:13px}
+.xs{font-size:12px}
+.mt-1{margin-top:6px}.mt-2{margin-top:12px}.mt-3{margin-top:18px}.mt-4{margin-top:26px}.mt-5{margin-top:36px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.between{justify-content:space-between}
+.grow{flex:1}
+.hidden{display:none!important}
+
+/* ---------- 레이아웃 ---------- */
+.topbar{position:sticky;top:0;z-index:20;background:var(--surface);border-bottom:1px solid var(--border)}
+.topbar-in{max-width:1040px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.logo{font-weight:800;font-size:15px;letter-spacing:-.02em;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.logo .dot{width:10px;height:10px;border-radius:50%;background:var(--brand);display:inline-block}
+.logo .draft{font-size:11px;font-weight:700;color:var(--warn);background:var(--warn-weak);padding:2px 7px;border-radius:999px}
+nav{display:flex;gap:4px;flex-wrap:wrap}
+nav a{padding:6px 10px;border-radius:8px;color:var(--muted);font-weight:600;font-size:14px}
+nav a:hover{background:var(--surface-2);text-decoration:none}
+nav a.active{color:var(--text);background:var(--surface-2)}
+nav a .badge{margin-left:5px}
+.tools{margin-left:auto;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+main{max-width:1040px;margin:0 auto;padding:22px 16px 80px}
+footer{max-width:1040px;margin:0 auto;padding:0 16px 40px;color:var(--faint);font-size:12px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+.card.flat{box-shadow:none}
+.grid{display:grid;gap:14px}
+.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:760px){.grid-2,.grid-3{grid-template-columns:1fr}}
+
+/* ---------- 버튼·배지·입력 ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-weight:700;font-size:14px;transition:.15s;white-space:nowrap}
+.btn:hover{background:var(--surface-2)}
+.btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+.btn.primary:hover{filter:brightness(.95)}
+.btn.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.btn.ghost{background:transparent}
+.btn.sm{padding:6px 10px;font-size:13px;border-radius:8px}
+.btn.lg{padding:14px 22px;font-size:16px;border-radius:12px}
+.btn.block{width:100%}
+.btn:disabled{opacity:.45;cursor:not-allowed;filter:none}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:700;background:var(--surface-2);color:var(--muted);white-space:nowrap}
+.badge.ok{background:var(--ok-weak);color:var(--ok)}
+.badge.brand{background:var(--brand-weak);color:var(--brand-text)}
+.badge.warn{background:var(--warn-weak);color:var(--warn)}
+.badge.lock{background:var(--surface-2);color:var(--lock)}
+.tbd{display:inline-flex;align-items:center;gap:4px;padding:1px 7px;border-radius:999px;font-size:11px;font-weight:700;background:var(--warn-weak);color:var(--warn);border:1px dashed var(--warn);vertical-align:middle}
+label.f{display:block;font-weight:700;font-size:13px;margin-bottom:6px;color:var(--muted)}
+input[type=text],input[type=date],select,textarea{width:100%;padding:11px 12px;border:1px solid var(--border);border-radius:10px;background:var(--surface);color:var(--text);font:inherit;font-size:15px}
+textarea{min-height:84px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--brand);outline-offset:1px;border-color:transparent}
+.seg{display:grid;gap:8px;grid-template-columns:repeat(3,1fr)}
+.seg.two{grid-template-columns:repeat(2,1fr)}
+.seg label{border:1px solid var(--border);border-radius:10px;padding:12px;cursor:pointer;background:var(--surface);display:block}
+.seg label:has(input:checked){border-color:var(--brand);background:var(--brand-weak)}
+.seg input{display:none}
+.seg b{display:block;font-size:14px}
+.seg span{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.check{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border:1px solid var(--border);border-radius:10px;cursor:pointer;background:var(--surface)}
+.check:has(input:checked){background:var(--ok-weak);border-color:var(--ok)}
+.check input{width:18px;height:18px;margin-top:3px;accent-color:var(--ok);flex:none}
+.check.readonly{cursor:default}
+
+/* ---------- 진행률 ---------- */
+.progress{height:10px;background:var(--surface-2);border-radius:999px;overflow:hidden}
+.progress > i{display:block;height:100%;background:var(--brand);border-radius:999px;transition:width .4s ease}
+.progress.ok > i{background:var(--ok)}
+
+/* ---------- 파트 카드 ---------- */
+.part{display:flex;gap:14px;align-items:flex-start;padding:16px 18px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);transition:.2s;position:relative}
+.part.clickable{cursor:pointer}
+.part.clickable:hover{border-color:var(--brand);transform:translateY(-1px)}
+.part.locked{opacity:.62}
+.part .num{flex:none;width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;background:var(--surface-2);color:var(--muted)}
+.part.done .num{background:var(--ok-weak);color:var(--ok)}
+.part.current .num{background:var(--brand-weak);color:var(--brand-text)}
+.part .steps{display:flex;gap:4px;margin-top:8px}
+.part .steps i{width:22px;height:5px;border-radius:3px;background:var(--surface-2)}
+.part .steps i.on{background:var(--ok)}
+.part.unlock-anim{animation:unlock .9s ease}
+@keyframes unlock{0%{box-shadow:0 0 0 0 rgba(232,52,78,.5)}70%{box-shadow:0 0 0 14px rgba(232,52,78,0)}100%{box-shadow:none}}
+
+/* ---------- 스텝퍼 ---------- */
+.stepper{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.step{padding:12px;border:1px solid var(--border);border-radius:12px;background:var(--surface);display:flex;gap:10px;align-items:center;cursor:pointer}
+.step .ic{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;background:var(--surface-2);color:var(--muted);flex:none}
+.step.done .ic{background:var(--ok);color:#fff}
+.step.active{border-color:var(--brand);background:var(--brand-weak)}
+.step.active .ic{background:var(--brand);color:#fff}
+.step.disabled{opacity:.5;cursor:not-allowed}
+.step b{display:block;font-size:14px}
+.step span{font-size:12px;color:var(--muted);display:block}
+@media (max-width:640px){.stepper{grid-template-columns:1fr}}
+
+/* ---------- 영상 ---------- */
+.video{aspect-ratio:16/9;border-radius:12px;background:linear-gradient(135deg,var(--surface-2),var(--border));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--muted);text-align:center;padding:16px;border:1px dashed var(--border)}
+.video .play{width:56px;height:56px;border-radius:50%;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:var(--shadow)}
+
+/* ---------- 퀴즈 ---------- */
+.choice{display:block;width:100%;text-align:left;padding:14px 16px;border:1px solid var(--border);border-radius:12px;background:var(--surface);color:var(--text);margin-top:8px;font-size:15px;font-weight:600;transition:.15s}
+.choice:hover{border-color:var(--brand)}
+.choice.correct{background:var(--ok-weak);border-color:var(--ok)}
+.choice.wrong{background:var(--brand-weak);border-color:var(--brand)}
+.choice:disabled{cursor:default;opacity:.9}
+.explain{border-left:4px solid var(--brand);padding:12px 14px;background:var(--brand-weak);border-radius:8px}
+.explain.good{border-color:var(--ok);background:var(--ok-weak)}
+.pass{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;background:var(--ok-weak);color:var(--ok);font-weight:800}
+
+/* ---------- 기타 ---------- */
+.banner{border:1px solid var(--brand);background:var(--brand-weak);border-radius:12px;padding:12px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.banner.warn{border-color:var(--warn);background:var(--warn-weak)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--text);color:var(--bg);padding:12px 18px;border-radius:12px;font-weight:700;opacity:0;pointer-events:none;transition:.25s;z-index:50;max-width:calc(100vw - 32px);text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:10px 8px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
+th{font-size:12px;color:var(--muted);font-weight:700}
+tr.clickable{cursor:pointer}
+tr.clickable:hover td{background:var(--surface-2)}
+.tablewrap{overflow-x:auto}
+.timeline{list-style:none;padding:0;margin:0;border-left:2px solid var(--border);margin-left:8px}
+.timeline li{position:relative;padding:4px 0 10px 18px;margin:0}
+.timeline li::before{content:"";position:absolute;left:-7px;top:11px;width:10px;height:10px;border-radius:50%;background:var(--ok);border:2px solid var(--surface)}
+.timeline li.pending::before{background:var(--border)}
+details{border:1px solid var(--border);border-radius:10px;padding:0 14px;background:var(--surface)}
+details+details{margin-top:8px}
+summary{padding:12px 0;font-weight:700;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:10px}
+summary::after{content:"+";color:var(--muted)}
+details[open] summary::after{content:"−"}
+details .body{padding:0 0 14px;color:var(--muted)}
+.quick{display:flex;flex-direction:column;gap:4px;padding:14px;border:1px solid var(--border);border-radius:12px;background:var(--surface)}
+.quick b{font-size:14px}
+.quick span{font-size:12px;color:var(--muted)}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:16px;flex-wrap:wrap}
+.tabs button{padding:10px 14px;border:0;background:none;color:var(--muted);font-weight:700;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs button.active{color:var(--text);border-bottom-color:var(--brand)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:14px}
+.kv dt{color:var(--muted);margin:0}
+.kv dd{margin:0}
+.lockbox{border:1px dashed var(--border);border-radius:12px;padding:14px;background:var(--surface-2);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.dev{border:1px dashed var(--faint);border-radius:10px;padding:10px 12px;font-size:12px;color:var(--faint);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="logo"><span class="dot"></span>AX교육팀 온보딩 허브 <span class="draft">초안</span></div>
+    <nav id="nav"></nav>
+    <div class="tools" id="tools"></div>
+  </div>
+</div>
+
+<main id="app"></main>
+<footer>
+  팀스파르타 AX교육팀 · 상시 온보딩 허브 초안 (ver 2026.10.15) · 이 페이지는 검색엔진에 노출되지 않도록 설정되어 있습니다. 실서비스에서는 개인별 토큰 링크로만 접근합니다.
+</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+/* =====================================================================
+   DATA — 챕터문제.md에서 생성됨 (ver 2026.10.15)
+   콘텐츠(챕터 순서·요약·체크리스트·퀴즈 문항) 변경은 챕터문제.md 수정 후 재생성.
+   🚨 시급·단가·지역별 정액 금액 숫자, 고객사명, 관리자 정보는 어디에도 쓰지 않는다.
+   ===================================================================== */
+const PLACEHOLDERS = {
+  PORTAL_URL: "https://tutor-scheduler-wheat.vercel.app/",   // 강사 포털(교무실) — 포털 이용 가이드에 공개된 주소
+  BIZ_DEADLINE: "{{BIZ_DEADLINE}}",
+  CONTRACT_CUTOFF: "{{CONTRACT_CUTOFF}}",
+  VIDEO_URLS: "{{VIDEO_URLS}}",
+};
+
+// 원본 문서 링크 — 챕터문제.md의 docs 항목과 1:1. 레벨·시급 안내 문서는 금액이 있어 허브에서 링크하지 않는다(포털 「내 자격」으로 대체).
+const DOCS = {
+  "강사 포털 이용 가이드":                         { url:"https://app.notion.com/p/3ae2dc3ef514802abc59cdb853c5578a" },
+  "[공지사항] AX교육팀 계약·재계약·온보딩 안내":   { url:"https://app.notion.com/p/3e22dc3ef514811abcf7d1d58b9aa361" },
+  "[공지사항] AX교육팀 경비(교통·숙박) 안내":      { url:"https://app.notion.com/p/3e32dc3ef51480a99750da947fc59baf", note:"지역별 정액 금액표는 이 원본에서만 확인" },
+  "강사·기술튜터 활동 제한 및 계약 해지 기준":     { url:"https://app.notion.com/p/3af2dc3ef514808f88a6d83db8b2f991" },
+  "계약 종료 시 계정·권한 해지 절차 안내":          { url:"https://app.notion.com/p/3e32dc3ef51481c9bfb1ebb830f100b8" },
+  "팀스파르타 강사 플레이북":                        { url:"https://app.notion.com/p/3ae2dc3ef51480afaa75deedd394cc9c", note:"ver 26.04" },
+  "팀스파르타 기술튜터 플레이북":                    { url:"https://app.notion.com/p/3ae2dc3ef51480f58b61ca0566e265d8", note:"ver 26.05 · CH1 책임과 의무 → CH2 체크리스트 → CH3 현장 실전 가이드 → 사회생활 가이드 순으로 읽기" },
+  "강사·기술튜터 정산 절차":                        { url:"https://app.notion.com/p/3d12dc3ef51480d692a3e0f2d274bd16" },
+  "슬랙 워크플로 제출 가이드":                      { url:"https://app.notion.com/p/3ae2dc3ef514808eb7d3f39d4b37bda5" },
+  "문의 방법":                                      { url:"https://app.notion.com/p/3ae2dc3ef514802c96c5fcfc5afd11da" },
+  "강사 포털 > 내 자격 (로그인)":                   { url:"https://tutor-scheduler-wheat.vercel.app/", portal:true, note:"레벨·시급 기준은 로그인 후 본인 것만 열람" },
+};
+const LINKS = {
+  workflowGuide: "https://b2bsparta.com/axslackworkflow",
+  invoiceForm:   "https://b2bsparta.com/invoice",
+  firstForm:     "https://docs.google.com/forms/d/e/1FAIpQLSeog74PTlWNmjw-jh7TiZEBi6zHNJOdUgaXuKbpFlBilO-ZUg/viewform",
+  slackInstructor: "https://spartaaxedu.slack.com/archives/C0AUX3WLCDU",
+  slackTutor:      "https://spartaaxedu.slack.com/archives/C0AUZ5VER7C",
+};
+
+const PARTS = [
+  {
+    code: "P0", title: "시작하기 · 필수 세팅", track: "common", audience: "전원",
+    video: "{{VIDEO_URLS.P0}}", videoNote: "3분 — 팀·기업교육 소개, 허브 사용법",
+    docs: ["강사 포털 이용 가이드"],
+    summary: [
+      "Slack 참여·프로필 설정, 멤버 ID 확인(프로필 > 멤버 ID 복사)",
+      "강사 포털(교무실) 가입은 Google 계정만 가능",
+      "가입 후 이메일·전화번호·차량 보유·교육 가능 일정·정산 정보 최신 유지",
+      "이력서·경력 등록",
+    ],
+    checklist: [
+      "Slack 워크스페이스 가입·프로필 설정",
+      "강사 포털 Google 가입 완료",
+      "포털에 연락처·정산 정보 입력",
+      "교육 가능 일정 등록",
+      "이력서·경력 등록",
+    ],
+  },
+  {
+    code: "P1", title: "계약 · 온보딩 · 발주", track: "common", audience: "전원",
+    video: "{{VIDEO_URLS.P1}}", videoNote: "",
+    docs: ["[공지사항] AX교육팀 계약·재계약·온보딩 안내"],
+    summary: [
+      "계약 단위: 강사 6개월(매년 1/1·7/1 기준) / 보조강사 3개월(분기 1일자)",
+      "신규 최초 계약: 강사 Lv.3·6개월 / 보조강사 Lv.1·3개월 / 전환자 Lv.1·3개월 (레벨 호칭만 안내)",
+      "레벨 반영 = 다음 계약 갱신 시점 / 갱신 재검토 = 직전 분기 참여 5일 미만",
+      "계약서(기간 기본조건) vs 발주서(교육 건별) / 시급 확정 기준일 = 발주서 발송일",
+      "온보딩 완료 전 계약·배정 불가 / 기본계약은 물량 보장 아님",
+    ],
+    checklist: [
+      "내 역할의 계약 단위·기준일 확인",
+      "발주서 확인 위치(강사 포털) 확인",
+      "완료일 기준 계약 기준일 규칙 이해",
+    ],
+  },
+  {
+    code: "P2", title: "경비 (교통 · 숙박)", track: "common", audience: "전원",
+    video: "{{VIDEO_URLS.P2}}", videoNote: "",
+    docs: ["[공지사항] AX교육팀 경비(교통·숙박) 안내"],
+    docNote: "지역별 정액 금액표는 허브에 싣지 않습니다. 원본 문서에서만 확인하세요.",
+    summary: [
+      "경비는 교육 건에 부여, 개인 협의 없음",
+      "정액(A)/실비(B) 중복 불가 — 단, 실비 선택 시 KTX+택시 합산 가능",
+      "실비 판정: 마지막 구간 도보 30분 이상 또는 연계 일반버스 배차 30분 이상 (장거리 교통편 배차 제외)",
+      "절차: 사전 신청 → 팀 확인 → 교육 → 마지막 투입일 기준 7일 내 사후 증빙 / 미신청 시 자동 정액",
+      "택시 한도 편도 3만·왕복 6만 / 교통비 왕복 1회 / 숙박 중 중간 왕복 미지급 / 턴키는 공고 금액이 최종",
+      "경로 조회: 네이버 지도 최소시간 경로, 교육 시작 시각 기준, 조회 일시 포함 전체 캡처",
+    ],
+    checklist: [
+      "경비 사전 신청 워크플로 위치 확인",
+      "네이버 지도 경로 캡처 요령 확인",
+      "정액/실비 판단 기준 이해",
+    ],
+  },
+  {
+    code: "P3", title: "활동 기준 · 보안", track: "common", audience: "전원",
+    video: "{{VIDEO_URLS.P3}}", videoNote: "",
+    docs: ["강사·기술튜터 활동 제한 및 계약 해지 기준", "계약 종료 시 계정·권한 해지 절차 안내"],
+    summary: [
+      "사유 산정은 협업 전체 기간 누적 / 동일 사건 중복 산정 없음",
+      "개시시각 미준수·5영업일 이내 취소 각 누적 3회 이상 → 해지·발주 중단 검토 / 통지 없는 불참·일방 취소는 즉시 검토",
+      "보수·계약 조건 비공개: 현장 언급 금지, 타인 조건 무단 공개 금지",
+      "사진·영상 SNS 게시는 사전 승인 필수 (가림 처리해도 특정 가능하면 금지)",
+      "교안 저작권 회사 귀속, 계약 종료 후에도 외부 공유 금지",
+      "장기 미활동 3개월 → 비활성·채널 퇴장 가능 / 계약 미갱신 시 계정·권한 해지 절차",
+    ],
+    checklist: [
+      "보수·계약 정보 비공개 원칙 확인",
+      "사진·영상 게시 전 승인 절차 확인",
+      "일정 변경·취소 시 담당 매니저 즉시 공유 원칙 확인",
+    ],
+  },
+  {
+    code: "P4-A", title: "강사 파트", track: "instructor", audience: "강사·겸임 (겸임은 P4-B 완료 후)",
+    video: "{{VIDEO_URLS.P4A}}", videoNote: "",
+    docs: ["팀스파르타 강사 플레이북", "강사 포털 > 내 자격 (로그인)"],
+    portal: true,
+    summary: [
+      "교안: 노션 기본(구조화·가독성), 제출 기한 교육 1달~7일 전",
+      "패들렛: 실습 결과물 업로드, 섹션 사전 구성, 익명 가능 안내",
+      "사내망 교육: 생성형 AI 툴 리스트 사전 공유(접근 승인 절차)",
+      "오리엔테이션 필수 항목 / 권장 흐름: 설명 → 공통 실습 → 개별 실습(단계 전환 멘트)",
+      "스타일 3원칙: 명확한 전달 · 참여형 실습 · 즉시 적용성 (+Do/Don't)",
+      "교육 전: PM 스레드·환경 점검(내·외부망/업로드/OS/GPT 워크스페이스)·도착 메시지",
+      "교육 후: 종료 메시지, 특이사항 시 반드시 PM 전화, 회고록, 보안 안내(로그아웃·파일 삭제·Gemini 기록 별도 삭제)",
+      "전문 강사 이상 신규 합류 시 샘플 영상 촬영",
+    ],
+    checklist: [
+      "교안 제작 타임라인 확인",
+      "패들렛 사용법 확인",
+      "교육 전/중/후 체크리스트 저장",
+      "포털 '내 자격'에서 내 레벨 확인(로그인)",
+    ],
+  },
+  {
+    code: "P4-B", title: "보조강사(기술튜터) 파트", track: "tutor", audience: "보조강사·겸임 (겸임은 이 파트 먼저)",
+    video: "{{VIDEO_URLS.P4B}}", videoNote: "",
+    docs: ["팀스파르타 기술튜터 플레이북", "강사 포털 > 내 자격 (로그인)"],
+    portal: true,
+    summary: [
+      "핵심 역할: 교육생 개별 실습 지원(질문 응대·현장 관찰·환경/계정 이슈)",
+      "반복 질문 → 강사에게 신호 → 전체 설명 전환",
+      "교육 전 환경 점검(내·외부망·업로드·실습 계정) / 교육 전·중·후 체크리스트",
+      "PBL 튜터링·회고 작성법 / 사회생활 가이드",
+      "겸임의 첫 교육은 보조강사로 참여",
+    ],
+    checklist: [
+      "튜터 체크리스트(전/중/후) 저장",
+      "반복 질문 대응 원칙 확인",
+      "포털 '내 자격'에서 내 레벨 확인(로그인)",
+    ],
+  },
+  {
+    code: "P5-A", title: "개인(프리랜서) 정산", track: "settle_free", audience: "프리랜서",
+    video: "{{VIDEO_URLS.P5A}}", videoNote: "",
+    docs: ["강사·기술튜터 정산 절차"],
+    summary: [
+      "3.3% 원천징수, 매번 제출 서류 없음(포털 등록 기반 자동 정산)",
+      "최초 1회 구글폼 제출(담당자명 '이다은')",
+      "정산일 익월 10일 / 명세서 매월 말 발행 → 이의는 매월 2일 자정까지 포털 문의",
+    ],
+    checklist: [
+      "최초 구글폼 제출",
+      "포털에 프리랜서 유형 등록",
+      "명세서 확인·이의 절차 확인",
+    ],
+  },
+  {
+    code: "P5-B", title: "사업자 정산", track: "settle_biz", audience: "개인사업자·법인",
+    video: "{{VIDEO_URLS.P5B}}", videoNote: "",
+    docs: ["강사·기술튜터 정산 절차", "슬랙 워크플로 제출 가이드"],
+    summary: [
+      "최초 1회: 사업자등록증·통장사본 업로드 + 구글폼",
+      "매번: 거래명세서(날인 필수) + 세금계산서",
+      "유일한 정식 경로: Slack 워크플로 「사업자 강의료 증빙 제출」 (개인 DM 금지)",
+      "계약서 단위 제출 / 3개월 이상 장기 교육은 매월, 미만은 종료 후 일괄",
+      "제출 내역 캡처 보관 권장 / 정보 변경 시 포털 갱신",
+      "제출 마감: {{BIZ_DEADLINE}} (문서 간 화/금 상이 — 확정 필요)",
+    ],
+    checklist: [
+      "사업자등록증·통장사본 업로드",
+      "거래명세서 양식 다운로드",
+      "워크플로 위치 확인",
+    ],
+  },
+  {
+    code: "P6", title: "마무리 — 요약 · 퀵링크 · 최종 완료", track: "final", audience: "전원",
+    video: null, docs: ["문의 방법"], summary: [], checklist: [],
+  },
+];
+
+// 퀴즈 34문항. type: "mc"(4지선다) | "ox". answer 는 choices 의 인덱스(ox 는 ["O","X"]).
+const QUIZ = [
+  // P0 (3)
+  { id:"P0-1", part:"P0", type:"mc", q:"강사 포털(교무실) 회원가입에 사용할 수 있는 계정은?", choices:["카카오","Google","네이버","애플"], answer:1, explain:"포털은 Google 계정으로만 가입할 수 있습니다.", source:"강사 포털 이용 가이드" },
+  { id:"P0-2", part:"P0", type:"mc", q:"포털에서 항상 최신으로 유지해야 하는 정보가 아닌 것은?", choices:["연락처","교육 가능 일정","정산 정보","취미·관심사"], answer:3, explain:"이메일·전화번호·차량 보유·일정·정산 정보를 최신으로 유지합니다.", source:"강사 포털 이용 가이드" },
+  { id:"P0-3", part:"P0", type:"mc", q:"Slack 멤버 ID는 어디서 확인하는가?", choices:["내 프로필 > 멤버 ID 복사","채널 설명","관리자에게 DM","이메일 서명"], answer:0, explain:"프로필 메뉴에서 멤버 ID를 복사해 포털에 입력합니다.", source:"강사 포털 이용 가이드" },
+  { id:"P0-4", part:"P0", type:"mc", q:"강사 포털 「내 일정」에 등록한 강의 가능 일정은 어디에 활용되는가?", choices:["강의 제안 및 배정 시 참고 자료","정산 금액 계산","출결 관리","계약 기간 결정"], answer:0, explain:"등록한 일정은 강의 제안·배정 시 참고되므로 변동이 생기면 최신 상태로 수정합니다.", source:"강사 포털 이용 가이드" },
+  { id:"P0-5", part:"P0", type:"mc", q:"정산을 위한 사업자 유형(프리랜서/개인사업자/법인)과 관련 정보는 포털의 어느 메뉴에서 등록하는가?", choices:["내 정보 > 사업자 정보 등록/수정","공고","배정 교육","내 일정"], answer:0, explain:"개인사업자·법인은 사업자등록증과 통장 사본도 함께 업로드하고, 변경 시 반드시 최신 정보로 수정합니다.", source:"강사 포털 이용 가이드" },
+  // P1 (5)
+  { id:"P1-1", part:"P1", type:"mc", q:"신규 합류 보조강사의 최초 계약 조건은?", choices:["Lv.1 / 3개월","Lv.3 / 6개월","Lv.1 / 6개월","Lv.2 / 3개월"], answer:0, explain:"신규 강사는 Lv.3/6개월, 보조강사→강사 전환자는 Lv.1/3개월입니다.", source:"[공지사항] AX교육팀 계약·재계약·온보딩 안내" },
+  { id:"P1-2", part:"P1", type:"mc", q:"계약 갱신이 재검토되는 기준은?", choices:["직전 분기 교육 참여 일자 5일 미만","월 1회 미만 참여","만족도 기준 미달 1회","분기 10일 미만"], answer:0, explain:"직전 산정 기간 참여 5일 미만이면 갱신이 진행되지 않을 수 있습니다.", source:"[공지사항] AX교육팀 계약·재계약·온보딩 안내" },
+  { id:"P1-3", part:"P1", type:"mc", q:"레벨 변경에 따른 시급은 언제부터 반영되는가?", choices:["승급 즉시","다음 달 1일","다음 계약 갱신 시점","정산일"], answer:2, explain:"계약 기간 중에는 변경되지 않습니다.", source:"[공지사항] AX교육팀 계약·재계약·온보딩 안내" },
+  { id:"P1-4", part:"P1", type:"mc", q:"교육 건별 시급이 확정되는 기준일은?", choices:["교육 진행일","발주서 발송일","발주서 승인일","정산일"], answer:1, explain:"발송 이후 레벨이 바뀌어도 해당 발주 건 단가는 유지됩니다.", source:"[공지사항] AX교육팀 계약·재계약·온보딩 안내" },
+  { id:"P1-5", part:"P1", type:"ox", q:"온보딩을 완료하지 않아도 교육 배정을 받을 수 있다.", choices:["O","X"], answer:1, explain:"온보딩 완료 전에는 계약·배정이 불가합니다.", source:"[공지사항] AX교육팀 계약·재계약·온보딩 안내" },
+  // P2 (5)
+  { id:"P2-1", part:"P2", type:"ox", q:"지역별 정액 교통비와 KTX·택시 실비는 중복으로 받을 수 있다.", choices:["O","X"], answer:1, explain:"둘 중 하나만 받을 수 있습니다. 단, 실비 선택 시 KTX와 택시 실비는 함께 산정될 수 있습니다.", source:"[공지사항] AX교육팀 경비(교통·숙박) 안내" },
+  { id:"P2-2", part:"P2", type:"mc", q:"실비 산정 대상 판정 기준은?", choices:["마지막 구간 도보 30분 이상 또는 연계 일반버스 배차 30분 이상","KTX 배차 1시간 이상","총 이동 2시간 이상","이동 거리 100km 이상"], answer:0, explain:"KTX·기차·지하철·시외버스의 배차는 판단에서 제외됩니다.", source:"[공지사항] AX교육팀 경비(교통·숙박) 안내" },
+  { id:"P2-3", part:"P2", type:"mc", q:"실비 정산의 올바른 순서는?", choices:["교육 후 영수증 일괄 제출","사전 신청 → 팀 확인 → 교육 → 7일 내 사후 증빙","담당 PM에게 DM","월말 명세서에 기재"], answer:1, explain:"사전 신청 없이 사후 제출하면 지급이 어렵습니다.", source:"[공지사항] AX교육팀 경비(교통·숙박) 안내" },
+  { id:"P2-4", part:"P2", type:"mc", q:"택시 실비 한도는?", choices:["편도 2만원","편도 3만원 / 왕복 최대 6만원","왕복 10만원","한도 없음"], answer:1, explain:"초과분은 지급되지 않습니다. 수도권 시내·자택↔역 택시는 지원 제외입니다.", source:"[공지사항] AX교육팀 경비(교통·숙박) 안내" },
+  { id:"P2-5", part:"P2", type:"ox", q:"숙박하며 진행하는 연속 교육은 중간에 집에 다녀오는 왕복 교통비도 지급된다.", choices:["O","X"], answer:1, explain:"교통비는 교육 1건당 왕복 1회이며, 숙박 기간 중간 왕복은 지급되지 않습니다.", source:"[공지사항] AX교육팀 경비(교통·숙박) 안내" },
+  // P3 (5)
+  { id:"P3-1", part:"P3", type:"ox", q:"교육 현장에서 본인의 시급이나 계약 조건을 언급해도 된다.", choices:["O","X"], answer:1, explain:"보수·계약 정보는 비공개 원칙이며, 위반 시 활동 제한 검토 대상입니다.", source:"강사·기술튜터 활동 제한 및 계약 해지 기준" },
+  { id:"P3-2", part:"P3", type:"mc", q:"확정된 교육을 교육 시작 5영업일 이내에 취소하면?", choices:["아무 영향 없음","시정 요청 대상, 누적 3회 이상 시 해지·발주 중단 검토","즉시 계약 해지","금전 패널티 부과"], answer:1, explain:"불가피한 사유는 즉시 담당 매니저에게 공유해야 합니다.", source:"강사·기술튜터 활동 제한 및 계약 해지 기준" },
+  { id:"P3-3", part:"P3", type:"mc", q:"교육 현장 사진·영상을 SNS에 올리기 전 해야 할 일은?", choices:["얼굴만 가리면 됨","담당 매니저에게 공개 가능 여부·범위 사전 승인","교육 종료 후에는 자유","고객사 로고만 제외"], answer:1, explain:"가림 처리해도 결합 정보로 특정 가능하면 게시할 수 없습니다.", source:"강사·기술튜터 활동 제한 및 계약 해지 기준" },
+  { id:"P3-4", part:"P3", type:"ox", q:"교안 저작권은 강사 본인에게 있으므로 계약 종료 후 외부 공유가 가능하다.", choices:["O","X"], answer:1, explain:"교안 저작권은 회사에 귀속되며 외부 공유가 금지됩니다.", source:"강사·기술튜터 활동 제한 및 계약 해지 기준" },
+  { id:"P3-5", part:"P3", type:"mc", q:"장기 미활동자로 분류되는 기준 기간은?", choices:["1개월","3개월","6개월","12개월"], answer:1, explain:"최근 참여일 또는 협업 의사 확인일 기준 3개월입니다.", source:"계약 종료 시 계정·권한 해지 절차" },
+  // P4-A (5)
+  { id:"P4A-1", part:"P4-A", type:"mc", q:"기본 교안 제작 툴과 제출 기한은?", choices:["PPT, 교육 전날","노션, 교육 1달~7일 전","구글 슬라이드, 2주 전","PDF, 당일"], answer:1, explain:"노션 교안을 구조화된 형태로 제작해 기한 내 제출합니다.", source:"팀스파르타 강사 플레이북" },
+  { id:"P4A-2", part:"P4-A", type:"mc", q:"교육 종료 시 필수로 안내해야 하는 것은?", choices:["만족도 조사","보안 안내 — 공용 PC 로그아웃·실습 파일 삭제","다음 교육 홍보","단체 사진 촬영"], answer:1, explain:"Gemini 채팅 기록은 워크스페이스에서 별도 삭제됨도 함께 안내합니다.", source:"팀스파르타 강사 플레이북" },
+  { id:"P4A-3", part:"P4-A", type:"mc", q:"수강생 실습 결과물은 어디에 업로드하도록 안내하는가?", choices:["패들렛","이메일","Slack DM","USB"], answer:0, explain:"익명 업로드가 가능하며, 섹션은 사전에 구성합니다.", source:"팀스파르타 강사 플레이북" },
+  { id:"P4A-4", part:"P4-A", type:"mc", q:"사내망 환경 교육 전에 해야 할 일은?", choices:["시연·실습용 생성형 AI 툴 리스트 사전 공유","별도 준비 없음","VPN 설치 안내","교안 인쇄"], answer:0, explain:"사내망은 AI 접근 사전 승인 절차가 필요합니다.", source:"팀스파르타 강사 플레이북" },
+  { id:"P4A-5", part:"P4-A", type:"mc", q:"강의 종료 후 특이사항(분위기 저조, 담당자 불만 등)이 있었다면?", choices:["회고록에만 기록","담당 PM에게 반드시 전화","다음날 보고","고객사에 직접 설명"], answer:1, explain:"종료 메시지는 항상 보내고, 특이사항은 전화가 원칙입니다.", source:"팀스파르타 강사 플레이북" },
+  // P4-B (4)
+  { id:"P4B-1", part:"P4-B", type:"mc", q:"기술튜터의 핵심 역할은?", choices:["수업 전체 진행","교육생 개개인의 실습 지원","출결 관리","계약 관리"], answer:1, explain:"질문 응대·현장 관찰·환경/계정 이슈를 처리합니다.", source:"팀스파르타 기술튜터 플레이북" },
+  { id:"P4B-2", part:"P4-B", type:"ox", q:"같은 질문이 여러 교육생에게 반복되면 튜터가 혼자 해결한다.", choices:["O","X"], answer:1, explain:"강사에게 신호를 보내 전체 설명으로 전환합니다.", source:"팀스파르타 기술튜터 플레이북" },
+  { id:"P4B-3", part:"P4-B", type:"mc", q:"겸임(강사+보조강사)의 첫 교육 참여 역할은?", choices:["강사","보조강사","참관","본인 선택"], answer:1, explain:"보조강사 플레이북을 먼저 숙지합니다.", source:"팀스파르타 기술튜터 플레이북" },
+  { id:"P4B-4", part:"P4-B", type:"mc", q:"교육 전 현장 점검 항목이 아닌 것은?", choices:["내·외부망 분리 여부","외부 사이트 업로드 가능 여부","실습 계정 접속","강사의 계약 조건 확인"], answer:3, explain:"보수·계약 정보는 현장에서 다루지 않습니다.", source:"팀스파르타 기술튜터 플레이북" },
+  { id:"P4B-5", part:"P4-B", type:"mc", q:"교육 중 고객 클레임이나 긴급한 세팅 이슈처럼 즉시 대응이 필요한 상황에서 PM에게 알리는 방법은?", choices:["Slack 스레드 댓글만 남긴다","담당 PM에게 전화한다","교육 종료 후 회고록에 적는다","강사에게만 알린다"], answer:1, explain:"일반 이슈는 Slack 스레드로, 즉시 대응이 필요한 사안과 고객 클레임은 PM에게 전화로 공유합니다.", source:"팀스파르타 기술튜터 플레이북" },
+  { id:"P4B-6", part:"P4-B", type:"mc", q:"실습 중 문제가 생겼을 때 기술튜터의 최우선 목표는?", choices:["원인을 끝까지 디버깅하는 것","교육생이 실습 흐름을 끝까지 따라가도록 돕는 것","강사에게 모든 문제를 넘기는 것","문제 교육생을 따로 남기는 것"], answer:1, explain:"완벽한 디버깅이 아니라 실습 흐름 유지가 목표입니다. 일시적 문제는 과감히 우회하고, 혼자 오래 붙잡지 않습니다.", source:"팀스파르타 기술튜터 플레이북" },
+  // P5-A (3)
+  { id:"P5A-1", part:"P5-A", type:"mc", q:"프리랜서가 정산 때마다 제출해야 하는 서류는?", choices:["거래명세서","세금계산서","없음","통장사본"], answer:2, explain:"포털 등록 기반 자동 정산이며, 최초 1회 구글폼만 제출합니다.", source:"강사·기술튜터 정산 절차" },
+  { id:"P5A-2", part:"P5-A", type:"mc", q:"프리랜서 정산일은?", choices:["당월 말일","익월 10일","매주 수요일","분기 말"], answer:1, explain:"예: 9월 교육 → 10월 10일 정산.", source:"강사·기술튜터 정산 절차" },
+  { id:"P5A-3", part:"P5-A", type:"mc", q:"명세서 이의제기 기한은?", choices:["매월 2일 자정까지","매월 10일","매월 말일","상시"], answer:0, explain:"기한 초과 시 다음 회차로 연기됩니다. 교육명·일자·수정 항목·증빙을 첨부합니다.", source:"강사·기술튜터 정산 절차" },
+  { id:"P5A-4", part:"P5-A", type:"mc", q:"프리랜서 정산 명세서는 어디서 확인하는가?", choices:["강사 포털 > 내 계약 > 명세서 다운로드","이메일로 개별 발송","담당 PM Slack DM","세무서 홈택스"], answer:0, explain:"매월 말 포털에서 발행되며, 교육명·강의 일자·시간·정산 금액이 실제 내역과 맞는지 확인합니다.", source:"강사·기술튜터 정산 절차" },
+  { id:"P5A-5", part:"P5-A", type:"mc", q:"경력증명서가 필요할 때 신청 방법과 발급 시점은?", choices:["Slack 워크플로 신청 → 매주 월요일 발급","담당 PM DM → 즉시 발급","포털 문의 → 매월 말 발급","이메일 요청 → 분기별 발급"], answer:0, explain:"정산·계약서·경력증명서 요청은 모두 Slack 워크플로로만 접수합니다. 경력증명서는 교육 건이 아닌 기간 단위로 발급됩니다.", source:"강사·기술튜터 정산 절차" },
+  // P5-B (4)
+  { id:"P5B-1", part:"P5-B", type:"mc", q:"사업자 정산의 유일한 정식 신청 경로는?", choices:["담당 매니저 DM","Slack 워크플로 「사업자 강의료 증빙 제출」","이메일","강사 포털 문의"], answer:1, explain:"개별 DM 정산 처리는 금지되었습니다.", source:"슬랙 워크플로 제출 가이드" },
+  { id:"P5B-2", part:"P5-B", type:"mc", q:"매번 제출해야 하는 서류는?", choices:["사업자등록증","통장사본","거래명세서(날인)+세금계산서","계약서 사본"], answer:2, explain:"사업자등록증·통장사본은 최초 1회만 제출합니다.", source:"강사·기술튜터 정산 절차" },
+  { id:"P5B-3", part:"P5-B", type:"mc", q:"3개월 이상 장기 교육의 증빙 제출 주기는?", choices:["종료 후 일괄","매월","매주","분기별"], answer:1, explain:"3개월 미만은 전체 종료 후 일괄 제출합니다.", source:"강사·기술튜터 정산 절차" },
+  { id:"P5B-4", part:"P5-B", type:"ox", q:"워크플로 입력 금액과 세금계산서 금액이 달라도 정산된다.", choices:["O","X"], answer:1, explain:"불일치·날인 누락 시 정산이 지연될 수 있습니다.", source:"슬랙 워크플로 제출 가이드" },
+  { id:"P5B-5", part:"P5-B", type:"mc", q:"사업자 강의료 증빙 워크플로의 「[고객사] 교육명」은 무엇을 기준으로 적는가?", choices:["계약서 기준","모집 공고 기준","본인이 기억하는 이름","담당 PM 이름"], answer:0, explain:"사업자명·사업자등록번호는 사업자등록증 기준, 교육명은 계약서 기준, 지급액은 VAT 포함 금액으로 입력합니다.", source:"슬랙 워크플로 제출 가이드" },
+  { id:"P5B-6", part:"P5-B", type:"mc", q:"거래명세서 양식은 어디서 받는가?", choices:["팀스파르타 거래명세서 양식 페이지(b2bsparta.com/invoice)에서 다운로드","담당 PM에게 개별 요청","자유 양식으로 작성","강사 포털 공지"], answer:0, explain:"양식을 내려받아 날인한 뒤 PDF로 제출합니다. 날인 누락이나 서류 미비로 지연된 건은 별도 처리가 어렵습니다.", source:"슬랙 워크플로 제출 가이드" },
+];
+
+// 변경 숙지(ack) 더미 — 기획.md §10. 금액·고객사명 없음.
+const ACK_ITEMS = [
+  { id:"ack-1", title:"경비 사후 증빙 제출 기한 안내 문구 정리", severity:"normal", audience:"all",
+    summary:["사후 증빙 제출 기한을 '마지막 투입일 기준 7일 이내'로 통일했습니다.","경로 캡처에는 조회 일시가 반드시 포함되어야 합니다.","기존 신청 건은 종전 기준으로 처리됩니다."],
+    doc:"[공지사항] AX교육팀 경비(교통·숙박) 안내", publish_from:"2026-10-12", publish_until:"2026-11-30" },
+  { id:"ack-2", title:"교육 종료 후 보안 안내 항목 추가 (필수 확인)", severity:"required", audience:"instructor",
+    summary:["교육 종료 시 공용 PC 로그아웃·실습 파일 삭제 안내가 필수 항목으로 추가되었습니다.","Gemini 채팅 기록은 워크스페이스에서 별도 삭제된다는 점도 함께 안내합니다.","다음 교육부터 적용되며, 체크리스트에 반영되었습니다."],
+    doc:"팀스파르타 강사 플레이북", publish_from:"2026-10-14", publish_until:"" },
+];
+
+// 어드민 목업용 더미 인원 (실명·고객사명 없음)
+const DUMMY_MEMBERS = [
+  { name:"김강사", role:"instructor", settle:"freelancer", issued:"2026-10-01", done:"2026-10-03", progress:1.0, last:"2026-10-03 16:20" },
+  { name:"이튜터", role:"tutor", settle:"biz", issued:"2026-10-06", done:null, progress:0.55, last:"2026-10-13 21:05" },
+  { name:"박겸임", role:"both", settle:"freelancer", issued:"2026-10-09", done:null, progress:0.2, last:"2026-10-10 09:40" },
+  { name:"최강사", role:"instructor", settle:"biz", issued:"2026-10-07", done:null, progress:0.0, last:"-" },
+];
+
+/* =====================================================================
+   STORE — 상태 접근은 전부 이 객체를 통해서만. 실서비스에서는 get/set 내부를
+   서버 저장(Railway 앱)으로 교체한다. localStorage 는 쓰지 않는다.
+   ===================================================================== */
+function freshState(){
+  return { member:null, progress:{}, quizRuns:{}, acks:{}, log:[], onboarded_at:null, finalAt:null, justUnlocked:null };
+}
+const store = (() => {
+  let state = freshState();
+  return {
+    get: () => state,
+    set: (patch) => { Object.assign(state, patch); render(); },
+    update: (fn) => { fn(state); render(); },
+    reset: () => { state = freshState(); render(); },
+    load: (obj) => { state = Object.assign(freshState(), obj); render(); },
+    snapshot: () => JSON.parse(JSON.stringify(state)),
+  };
+})();
+
+// 실서비스: 강사 플랫폼 API POST /onboarding/complete { member_id, completed_at }
+const platformApi = {
+  recordCompletion(member, at){
+    console.info("[stub] platformApi.recordCompletion", member, at);
+    return Promise.resolve({ ok:true });
+  },
+};
+
+/* ---------- 유틸 ---------- */
+const ROLE_LABEL = { instructor:"강사", tutor:"보조강사", both:"겸임" };
+const SETTLE_LABEL = { freelancer:"프리랜서", biz:"개인사업자·법인" };
+const STEP_NAMES = { video:"영상 시청", doc:"문서 숙지", quiz:"퀴즈 통과", checklist:"체크리스트" };
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pad = n => String(n).padStart(2,"0");
+const nowIso = () => new Date().toISOString();
+const todayStr = () => { const d=new Date(); return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; };
+function fmt(iso){ if(!iso) return ""; const d=new Date(iso); return `${d.getFullYear()}.${pad(d.getMonth()+1)}.${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`; }
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function tbd(label){ return `<span class="tbd">확정 예정${label?` · ${esc(label)}`:""}</span>`; }
+function withTbd(text){ return esc(text).replace(/\{\{([A-Z_\.0-9]+)\}\}/g, (_,k)=>tbd(k)); }
+function partByCode(code){ return PARTS.find(p=>p.code===code); }
+function quizOf(code){ return QUIZ.filter(q=>q.part===code); }
+let toastTimer;
+function toast(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove("show"),2600); }
+function log(event, part){ store.get().log.push({ at:nowIso(), event, part:part||null }); }
+
+/* ---------- 트랙·진행·잠금 ---------- */
+function buildTrack(role, settle){
+  const codes = ["P0","P1","P2","P3"];
+  if(role==="instructor") codes.push("P4-A");
+  else if(role==="tutor") codes.push("P4-B");
+  else codes.push("P4-B","P4-A");            // 겸임: 보조강사 파트 먼저
+  codes.push(settle==="freelancer" ? "P5-A" : "P5-B");
+  codes.push("P6");
+  return codes;
+}
+function track(){ const m=store.get().member; return m ? buildTrack(m.role, m.settle) : []; }
+function prog(code){
+  const s=store.get();
+  if(!s.progress[code]){
+    const p=partByCode(code);
+    s.progress[code] = { video:null, doc:null, quiz:null, checks:(p.checklist||[]).map(()=>false), checklist:null, docRead:(p.docs||[]).map(()=>false) };
+  }
+  const pr=s.progress[code];
+  if(!pr.docRead) pr.docRead=(partByCode(code).docs||[]).map(()=>!!pr.doc);   // 이전 버전 진행상황 파일 호환
+  return pr;
+}
+function stepsDone(code){
+  if(code==="P6") return store.get().finalAt ? 1 : 0;
+  const p=prog(code); return ["video","doc","quiz","checklist"].filter(k=>p[k]).length;
+}
+function stepsTotal(code){ return code==="P6" ? 1 : 4; }
+function partDone(code){ return stepsDone(code)===stepsTotal(code); }
+function isUnlocked(code){
+  const t=track(); const i=t.indexOf(code);
+  if(i<0) return false; if(i===0) return true;
+  return partDone(t[i-1]);
+}
+function allPartsDone(){ return track().filter(c=>c!=="P6").every(partDone); }
+function overall(){
+  const t=track(); const total=t.reduce((n,c)=>n+stepsTotal(c),0); const done=t.reduce((n,c)=>n+stepsDone(c),0);
+  return { done, total, pct: total ? Math.round(done/total*100) : 0 };
+}
+function estMinutes(){ const n=track().length-1; return [n*15, n*20]; }
+function completePart(code){
+  // 파트 완료 후 다음 파트 언락 처리 (애니메이션용 표시)
+  const t=track(); const next=t[t.indexOf(code)+1];
+  if(next){ store.get().justUnlocked=next; }
+  toast(`${partByCode(code).title} 파트를 완료했습니다. 다음 파트가 열렸습니다.`);
+}
+
+/* ---------- 변경 숙지(ack) ---------- */
+function audienceMatch(aud, role){
+  if(aud==="all"||aud==="existing") return true;
+  if(aud==="new") return false;
+  if(aud==="instructor") return role==="instructor"||role==="both";
+  if(aud==="tutor") return role==="tutor"||role==="both";
+  return false;
+}
+function allAckItems(){ return ACK_ITEMS.concat(store.get().adminAcks||[]); }
+function visibleAcks(){
+  const s=store.get(); if(!s.member||!s.onboarded_at) return [];
+  const since=s.onboarded_at.slice(0,10), today=todayStr();
+  return allAckItems().filter(a => audienceMatch(a.audience, s.member.role) && a.publish_from>since && a.publish_from<=today && (!a.publish_until||a.publish_until>=today));
+}
+function pendingAcks(){ const s=store.get(); return visibleAcks().filter(a=>!s.acks[a.id]); }
+function blockedByAck(){ return pendingAcks().some(a=>a.severity==="required"); }
+
+/* ---------- 라우터 ---------- */
+window.addEventListener("hashchange", render);
+function go(hash){ if(location.hash===hash) render(); else location.hash=hash; }
+function route(){ const h=(location.hash||"#").slice(1); const [name,arg]=h.split("/"); return { name:name||"", arg: arg ? decodeURIComponent(arg) : "" }; }
+
+function render(){
+  const s=store.get(); const r=route();
+  renderNav(r);
+  const app=document.getElementById("app");
+  if(r.name==="admin"){ app.innerHTML=viewAdmin(r.arg); bindAdmin(); return; }
+  if(!s.member){ app.innerHTML=viewStart(); bindStart(); return; }
+  switch(r.name){
+    case "part": {
+      const code=r.arg;
+      if(!track().includes(code)) { toast("내 트랙에 없는 파트입니다."); return go("#home"); }
+      if(!isUnlocked(code)) { toast("이전 파트를 완료하면 열립니다."); return go("#home"); }
+      if(blockedByAck()) { toast("필수 변경사항을 먼저 확인해 주세요."); return go("#changes"); }
+      if(code==="P6") return go("#final");
+      app.innerHTML=viewPart(code); bindPart(code); break;
+    }
+    case "quiz": {
+      const code=r.arg;
+      if(!isUnlocked(code)||!prog(code).doc) { toast("문서 숙지 단계를 먼저 완료해 주세요."); return go(isUnlocked(code)?`#part/${code}`:"#home"); }
+      app.innerHTML=viewQuiz(code); bindQuiz(code); break;
+    }
+    case "final":
+      if(!isUnlocked("P6")) { toast("모든 파트를 완료하면 열립니다."); return go("#home"); }
+      app.innerHTML=viewFinal(); bindFinal(); break;
+    case "done":
+      if(!s.finalAt) return go("#home");
+      app.innerHTML=viewDone(); break;
+    case "changes":
+      if(!s.onboarded_at) return go("#home");
+      app.innerHTML=viewChanges(); bindChanges(); break;
+    default:
+      app.innerHTML=viewHome(); bindHome();
+  }
+  window.scrollTo({top:0});
+}
+
+/* ---------- 공통 상단 ---------- */
+function renderNav(r){
+  const s=store.get(); const nav=document.getElementById("nav"); const tools=document.getElementById("tools");
+  const pend=pendingAcks().length;
+  const links=[];
+  if(s.member){
+    links.push(`<a href="#home" class="${r.name===""||r.name==="home"||r.name==="part"||r.name==="quiz"?"active":""}">내 트랙</a>`);
+    if(s.onboarded_at) links.push(`<a href="#changes" class="${r.name==="changes"?"active":""}">변경사항${pend?`<span class="badge brand">${pend}</span>`:""}</a>`);
+  }
+  links.push(`<a href="#admin" class="${r.name==="admin"?"active":""}">어드민 <span class="badge xs">목업</span></a>`);
+  nav.innerHTML=links.join("");
+  tools.innerHTML = `
+    ${s.member?`<span class="badge">${esc(s.member.name)} · ${ROLE_LABEL[s.member.role]} · ${SETTLE_LABEL[s.member.settle]}</span>`:""}
+    <button class="btn sm ghost" id="btn-export" title="진행상황을 파일로 저장">내보내기</button>
+    <label class="btn sm ghost" title="저장한 진행상황 파일 불러오기">불러오기<input type="file" id="inp-import" accept="application/json" class="hidden"></label>
+    <button class="btn sm ghost" id="btn-theme" title="화면 모드 전환">◐</button>
+    ${s.member?`<button class="btn sm ghost" id="btn-reset" title="처음부터 다시">초기화</button>`:""}`;
+  document.getElementById("btn-export").onclick=exportState;
+  document.getElementById("inp-import").onchange=importState;
+  document.getElementById("btn-theme").onclick=()=>{
+    const root=document.documentElement; const cur=root.getAttribute("data-theme");
+    const dark = cur ? cur==="dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+    root.setAttribute("data-theme", dark?"light":"dark");
+  };
+  const rs=document.getElementById("btn-reset"); if(rs) rs.onclick=()=>{ if(confirm("진행상황을 모두 지우고 처음부터 시작할까요?")){ store.reset(); go("#home"); } };
+}
+function exportState(){
+  const blob=new Blob([JSON.stringify(store.snapshot(),null,2)],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=`onboarding-progress-${todayStr()}.json`; a.click(); URL.revokeObjectURL(a.href);
+  toast("진행상황을 내보냈습니다.");
+}
+function importState(e){
+  const f=e.target.files[0]; if(!f) return;
+  const rd=new FileReader();
+  rd.onload=()=>{ try{ store.load(JSON.parse(rd.result)); toast("진행상황을 불러왔습니다."); go("#home"); }catch{ toast("파일을 읽을 수 없습니다."); } };
+  rd.readAsText(f); e.target.value="";
+}
+
+/* =====================================================================
+   S0 시작
+   ===================================================================== */
+function viewStart(){
+  return `
+  <div style="max-width:620px;margin:0 auto">
+    <div class="card">
+      <span class="badge brand">시작하기</span>
+      <h1 class="mt-2">팀스파르타 AX교육팀에 오신 것을 환영합니다</h1>
+      <p class="muted mt-2">합류 직후 혼자서도 끝까지 진행할 수 있는 상시 온보딩입니다. 파트마다 <b>영상 → 문서 → 퀴즈 → 체크리스트</b>를 마치면 다음 파트가 열리고, 모든 파트를 마치면 계약과 교육 배정이 가능해집니다.</p>
+      <form id="form-start" class="mt-4">
+        <label class="f">이름</label>
+        <input type="text" name="name" placeholder="예: 김강사" required maxlength="20">
+        <label class="f mt-3">역할</label>
+        <div class="seg">
+          <label><input type="radio" name="role" value="instructor" checked><b>강사</b><span>공통 → 강사 파트</span></label>
+          <label><input type="radio" name="role" value="tutor"><b>보조강사</b><span>공통 → 보조강사 파트</span></label>
+          <label><input type="radio" name="role" value="both"><b>겸임</b><span>보조강사 파트 → 강사 파트</span></label>
+        </div>
+        <label class="f mt-3">정산 유형</label>
+        <div class="seg two">
+          <label><input type="radio" name="settle" value="freelancer" checked><b>프리랜서</b><span>3.3% 원천징수</span></label>
+          <label><input type="radio" name="settle" value="biz"><b>개인사업자·법인</b><span>세금계산서 발행</span></label>
+        </div>
+        <div class="dev mt-3">
+          <label style="display:flex;gap:6px;align-items:center;cursor:pointer"><input type="checkbox" name="existing"> 기존 활동자로 체험 (온보딩 완료 상태로 시작 → 변경사항 화면 확인용)</label>
+        </div>
+        <button class="btn primary lg block mt-4" type="submit">내 트랙 만들기</button>
+      </form>
+      <p class="xs faint mt-3">실서비스에서는 개인별 토큰 링크로 접속하면 어드민이 등록한 이름·역할·정산 유형으로 자동 설정됩니다. 이 선택 화면은 초안 확인용입니다.</p>
+    </div>
+  </div>`;
+}
+function bindStart(){
+  document.getElementById("form-start").onsubmit=(e)=>{
+    e.preventDefault(); const fd=new FormData(e.target);
+    const name=(fd.get("name")||"").toString().trim(); if(!name) return;
+    const existing=fd.get("existing")==="on";
+    store.update(s=>{
+      s.member={ name, role:fd.get("role"), settle:fd.get("settle"), issued_at:nowIso() };
+      s.log.push({ at:nowIso(), event:"링크 발급(초안: 트랙 생성)", part:null });
+      if(existing){
+        // 체험용: 모든 파트 완료 + 9월 1일 온보딩 완료 상태
+        const t=buildTrack(s.member.role, s.member.settle); const past="2026-09-01T10:00:00.000Z";
+        t.filter(c=>c!=="P6").forEach(c=>{ const p=partByCode(c); s.progress[c]={video:past,doc:past,quiz:past,checks:(p.checklist||[]).map(()=>true),checklist:past}; });
+        s.finalAt=past; s.onboarded_at=past;
+      }
+    });
+    go("#home");
+  };
+}
+
+/* =====================================================================
+   S1 홈 (트랙 보드)
+   ===================================================================== */
+function viewHome(){
+  const s=store.get(); const t=track(); const o=overall(); const [mn,mx]=estMinutes();
+  const pend=pendingAcks(); const req=pend.filter(a=>a.severity==="required");
+  const current=t.find(c=>isUnlocked(c)&&!partDone(c));
+  const cards=t.map((code,i)=>{
+    const p=partByCode(code); const done=partDone(code); const open=isUnlocked(code);
+    const cls=["part", done?"done":"", open&&!done?"current":"", !open?"locked":"", open?"clickable":"", s.justUnlocked===code?"unlock-anim":""].join(" ");
+    const steps = code==="P6" ? "" : `<div class="steps">${["video","doc","quiz","checklist"].map(k=>`<i class="${prog(code)[k]?"on":""}" title="${STEP_NAMES[k]}"></i>`).join("")}</div>`;
+    const status = done ? `<span class="badge ok">완료 ✓ ${fmt(code==="P6"?s.finalAt:prog(code).checklist)}</span>`
+                 : open ? `<span class="badge brand">진행중 · ${stepsDone(code)}/${stepsTotal(code)}단계</span>`
+                 : `<span class="badge lock">🔒 잠김 · 이전 파트를 완료하면 열립니다</span>`;
+    return `<div class="${cls}" data-code="${code}" data-open="${open}">
+      <div class="num">${esc(code)}</div>
+      <div class="grow">
+        <div class="row between"><h3>${esc(p.title)}</h3>${status}</div>
+        <p class="small muted mt-1">대상: ${esc(p.audience)}${p.docs?.length?` · 문서: ${esc(p.docs[0])}${p.docs.length>1?" 외":""}`:""}</p>
+        ${steps}
+      </div>
+    </div>`;
+  }).join("");
+  s.justUnlocked=null;
+  return `
+  ${req.length?`<div class="banner mb"><b>필수 변경사항 ${req.length}건을 아직 확인하지 않으셨습니다.</b><span class="muted small">확인 전에는 파트에 들어갈 수 없습니다.</span><a class="btn sm primary" href="#changes" style="margin-left:auto">지금 확인하기</a></div><div class="mt-3"></div>`:
+    pend.length?`<div class="banner warn"><b>새 변경사항 ${pend.length}건</b><span class="muted small">운영 문서가 개정되었습니다. 시간 날 때 확인해 주세요.</span><a class="btn sm" href="#changes" style="margin-left:auto">변경사항 보기</a></div><div class="mt-3"></div>`:""}
+  <div class="card">
+    <div class="row between">
+      <div>
+        <p class="small muted">${esc(s.member.name)} 님의 온보딩 트랙 · ${ROLE_LABEL[s.member.role]} · ${SETTLE_LABEL[s.member.settle]}</p>
+        <h1 class="mt-1">${s.finalAt?"온보딩을 모두 마쳤습니다":o.done===0?"첫 파트부터 시작해 볼까요?":"이어서 진행해 주세요"}</h1>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:28px;font-weight:800">${o.pct}%</div>
+        <div class="xs muted">${o.done} / ${o.total} 단계 완료</div>
+      </div>
+    </div>
+    <div class="progress mt-3 ${s.finalAt?"ok":""}"><i style="width:${o.pct}%"></i></div>
+    <div class="row between mt-2 small muted">
+      <span>파트 ${t.length}개 · 예상 소요 약 ${mn}~${mx}분</span>
+      ${s.finalAt?`<a href="#done">완료 화면 보기</a>`:current?`<a href="${current==="P6"?"#final":`#part/${current}`}">${esc(partByCode(current).title)} 계속하기 →</a>`:""}
+    </div>
+  </div>
+  <div class="grid mt-3" style="gap:10px">${cards}</div>
+  <p class="xs faint mt-3">파트는 순서대로 열립니다. 각 파트의 4단계(영상·문서·퀴즈·체크리스트)를 모두 마쳐야 다음 파트로 넘어갈 수 있고, 모든 단계의 완료 시각이 기록됩니다.</p>`;
+}
+function bindHome(){
+  document.querySelectorAll(".part[data-open='true']").forEach(el=>{
+    el.onclick=()=>{ const c=el.dataset.code; go(c==="P6"?"#final":`#part/${c}`); };
+  });
+}
+
+/* =====================================================================
+   S2 파트 상세 (4단계 스텝퍼)
+   ===================================================================== */
+function activeStep(code){ const p=prog(code); if(!p.video) return "video"; if(!p.doc) return "doc"; if(!p.quiz) return "quiz"; return "checklist"; }
+function viewPart(code){
+  const p=partByCode(code); const pr=prog(code); const s=store.get();
+  const t=track(); const idx=t.indexOf(code);
+  const act = s.viewStep && s.viewStep.code===code ? s.viewStep.step : activeStep(code);
+  const order=["video","doc","quiz","checklist"];
+  const canView = k => { const i=order.indexOf(k); return i===0 || !!pr[order[i-1]]; };
+  const stepper=order.map((k,i)=>`<div class="step ${pr[k]?"done":""} ${act===k?"active":""} ${!canView(k)?"disabled":""}" data-step="${k}">
+      <div class="ic">${pr[k]?"✓":i+1}</div>
+      <div><b>${STEP_NAMES[k]}</b><span>${pr[k]?fmt(pr[k]):canView(k)?"진행 가능":"이전 단계 후 열림"}</span></div>
+    </div>`).join("");
+  let body="";
+  if(act==="video"){
+    body=`<h2>영상 시청</h2>
+      <p class="muted small mt-1">파트 핵심을 5~10분으로 정리한 영상입니다. 끝까지 보신 뒤 아래 버튼을 눌러 주세요.</p>
+      <div class="video mt-3">
+        <div class="play">▶</div>
+        <b>영상 준비 중</b>
+        <span class="small">${withTbd(p.video)}${p.videoNote?` · ${esc(p.videoNote)}`:""}</span>
+        <span class="xs">촬영 후 영상 주소를 챕터문제.md에서 교체하면 이 자리에 플레이어가 표시됩니다.</span>
+      </div>
+      <div class="row mt-3">${pr.video?`<span class="badge ok">시청 완료 ${fmt(pr.video)}</span>`:`<button class="btn primary" id="btn-video">시청 완료</button>`}</div>`;
+  } else if(act==="doc"){
+    const allRead = pr.docRead.every(Boolean);
+    const qs=quizOf(code);
+    body=`<h2>문서 숙지</h2>
+      <p class="muted small mt-1">아래 요약을 읽고, 원본 문서를 하나씩 열어 끝까지 읽은 뒤 「읽었습니다」에 직접 체크해 주세요. 모든 문서에 체크해야 숙지 버튼이 활성화됩니다.</p>
+      <div class="card flat mt-3" style="background:var(--surface-2)">
+        <ul>${p.summary.map(x=>`<li>${withTbd(x)}</li>`).join("")}</ul>
+      </div>
+      ${p.docNote?`<div class="banner warn mt-3 small">${esc(p.docNote)}</div>`:""}
+      <p class="small muted mt-3"><b>원본 문서 ${pr.docRead.filter(Boolean).length} / ${p.docs.length}</b></p>
+      <div class="grid mt-1" style="gap:8px">${p.docs.map((d,i)=>{ const meta=DOCS[d]||{}; const read=pr.docRead[i]; return `<div class="doc ${read?"read":""}">
+          <span style="font-size:20px">${meta.portal?"🔒":"📄"}</span>
+          <div class="t"><b>${esc(d)}</b>${meta.note?`<span>${esc(meta.note)}</span>`:""}</div>
+          ${meta.url?`<a class="btn sm" href="${esc(meta.url)}" target="_blank" rel="noopener" data-docopen="${i}">열기 ↗</a>`:`<span class="tbd">링크 확정 예정</span>`}
+          <label><input type="checkbox" data-doc="${i}" ${read?"checked":""} ${pr.doc?"disabled":""}>읽었습니다</label>
+        </div>`; }).join("")}</div>
+      ${p.portal?`<div class="lockbox mt-3"><span style="font-size:22px">🔒</span><div class="grow"><b>레벨·시급 기준표는 허브에 싣지 않습니다.</b><p class="small muted">본인의 레벨과 기준은 강사 포털에 로그인한 뒤 「내 자격」 메뉴에서 확인하실 수 있습니다.</p></div><a class="btn sm primary" href="${esc(PLACEHOLDERS.PORTAL_URL)}" target="_blank" rel="noopener">강사 포털 열기 ↗</a></div>`:""}
+      ${qs.length?`<details class="mt-3"><summary>이 파트 퀴즈 출제 범위 미리보기 (${qs.length}문항)</summary><div class="body"><ul class="qlist">${qs.map((q,i)=>`<li>${i+1}. ${esc(q.q)} <span class="xs faint">(${q.type==="ox"?"O/X":"4지선다"} · 근거: ${esc(q.source)})</span></li>`).join("")}</ul><p class="xs faint mt-2">정답은 퀴즈에서 직접 풀며 확인합니다. 문서를 읽을 때 위 항목을 특히 눈여겨봐 주세요.</p></div></details>`:""}
+      <div class="row mt-3">${pr.doc?`<span class="badge ok">숙지 완료 ${fmt(pr.doc)}</span>`:`<button class="btn primary" id="btn-doc" ${allRead?"":"disabled"}>읽고 숙지했습니다</button>${allRead?"":`<span class="xs muted">문서를 모두 읽고 체크하면 활성화됩니다.</span>`}`}</div>`;
+  } else if(act==="quiz"){
+    const qs=quizOf(code);
+    body=`<h2>퀴즈</h2>
+      <p class="muted small mt-1">${qs.length}문항입니다. 한 문항씩 바로 채점되며, 틀리면 해설을 확인한 뒤 다시 풀 수 있습니다. 전 문항을 맞히면 통과합니다.</p>
+      <div class="row mt-3">${pr.quiz?`<span class="pass">🏅 퀴즈 통과 · ${fmt(pr.quiz)}</span><button class="btn sm ghost" id="btn-quiz-again">다시 풀어보기(기록 유지)</button>`:`<button class="btn primary" id="btn-quiz">퀴즈 시작</button>`}</div>`;
+  } else {
+    body=`<h2>체크리스트</h2>
+      <p class="muted small mt-1">실제로 실행한 항목에 체크해 주세요. 모두 체크하면 이 파트가 완료됩니다.</p>
+      <div class="grid mt-3" style="gap:8px">${p.checklist.map((c,i)=>`<label class="check ${pr.checklist?"readonly":""}"><input type="checkbox" data-i="${i}" ${pr.checks[i]?"checked":""} ${pr.checklist?"disabled":""}><span>${withTbd(c)}</span></label>`).join("")}</div>
+      <div class="row mt-3">${pr.checklist?`<span class="badge ok">파트 완료 ✓ ${fmt(pr.checklist)}</span>${t[idx+1]?`<a class="btn primary" href="${t[idx+1]==="P6"?"#final":`#part/${t[idx+1]}`}">다음 파트로 →</a>`:""}`:`<span class="small muted">${pr.checks.filter(Boolean).length} / ${p.checklist.length} 항목</span>`}</div>`;
+  }
+  return `
+  <div class="row between">
+    <a href="#home" class="small">← 내 트랙</a>
+    <span class="small muted">${idx+1} / ${t.length} 파트</span>
+  </div>
+  <div class="card mt-2">
+    <span class="badge">${esc(code)}</span>
+    <h1 class="mt-2">${esc(p.title)}</h1>
+    <p class="muted small mt-1">대상: ${esc(p.audience)}</p>
+    <div class="stepper mt-3">${stepper}</div>
+  </div>
+  <div class="card mt-3">${body}</div>
+  <div class="dev mt-3">초안 리뷰용 <button class="btn sm ghost" id="btn-dev-complete">이 파트 바로 완료 처리</button><span>실서비스에는 없는 버튼입니다.</span></div>`;
+}
+function bindPart(code){
+  const p=partByCode(code);
+  document.querySelectorAll(".step").forEach(el=>{
+    el.onclick=()=>{ if(el.classList.contains("disabled")) return toast("이전 단계를 먼저 완료해 주세요."); store.update(s=>{ s.viewStep={code, step:el.dataset.step}; }); };
+  });
+  const bv=document.getElementById("btn-video"); if(bv) bv.onclick=()=>store.update(s=>{ prog(code).video=nowIso(); s.viewStep=null; log("영상 시청 완료",code); toast("영상 시청이 기록되었습니다."); });
+  const bd=document.getElementById("btn-doc"); if(bd) bd.onclick=()=>{ if(!prog(code).docRead.every(Boolean)) return toast("원본 문서를 모두 읽고 체크해 주세요."); store.update(s=>{ prog(code).doc=nowIso(); s.viewStep=null; log("문서 숙지",code); toast("문서 숙지가 기록되었습니다."); }); };
+  document.querySelectorAll("input[data-doc]:not(:disabled)").forEach(inp=>{
+    inp.onchange=()=>store.update(s=>{ const pr=prog(code); pr.docRead[+inp.dataset.doc]=inp.checked; s.viewStep={code, step:"doc"}; if(inp.checked) s.log.push({at:nowIso(), event:`문서 읽음: ${p.docs[+inp.dataset.doc]}`, part:code}); });
+  });
+  document.querySelectorAll("a[data-docopen]").forEach(a=>{ a.onclick=()=>{ store.get().log.push({at:nowIso(), event:`문서 열람: ${p.docs[+a.dataset.docopen]}`, part:code}); }; });
+  const bq=document.getElementById("btn-quiz")||document.getElementById("btn-quiz-again"); if(bq) bq.onclick=()=>{ startQuiz(code); go(`#quiz/${code}`); };
+  document.querySelectorAll(".check input:not(:disabled)").forEach(inp=>{
+    inp.onchange=()=>store.update(s=>{
+      const pr=prog(code); pr.checks[+inp.dataset.i]=inp.checked;
+      if(pr.checks.every(Boolean)){ pr.checklist=nowIso(); s.viewStep=null; log("체크리스트 완료",code); completePart(code); }
+    });
+  });
+  document.getElementById("btn-dev-complete").onclick=()=>store.update(s=>{
+    const pr=prog(code); const ts=nowIso();
+    pr.video=pr.video||ts; pr.docRead=pr.docRead.map(()=>true); pr.doc=pr.doc||ts; pr.quiz=pr.quiz||ts; pr.checks=pr.checks.map(()=>true); pr.checklist=pr.checklist||ts; s.viewStep=null;
+    log("(리뷰용) 파트 즉시 완료",code); completePart(code);
+  });
+}
+
+/* =====================================================================
+   S3 퀴즈 엔진
+   ===================================================================== */
+function startQuiz(code){
+  const qs=shuffle(quizOf(code).map(q=>q.id));
+  store.get().quizRuns[code]={ order:qs, idx:0, choiceOrder:null, picked:null, wrongCount:0, passed:false };
+  log("퀴즈 시작",code);
+}
+function currentQ(code){
+  const run=store.get().quizRuns[code]; const q=QUIZ.find(x=>x.id===run.order[run.idx]);
+  if(!run.choiceOrder){ run.choiceOrder = q.type==="ox" ? [0,1] : shuffle(q.choices.map((_,i)=>i)); }
+  return q;
+}
+function viewQuiz(code){
+  const p=partByCode(code); const run=store.get().quizRuns[code];
+  if(!run) { startQuiz(code); }
+  const r=store.get().quizRuns[code];
+  if(r.passed){
+    return `<div class="card" style="text-align:center;max-width:560px;margin:0 auto">
+      <div style="font-size:52px">🏅</div>
+      <h1 class="mt-2">퀴즈 통과</h1>
+      <p class="muted mt-2">${esc(p.title)} 파트의 ${quizOf(code).length}문항을 모두 맞히셨습니다.${r.wrongCount?` (오답 후 재응시 ${r.wrongCount}회)`:""}</p>
+      <div class="row mt-4" style="justify-content:center"><a class="btn primary lg" href="#part/${code}">체크리스트로 이동</a></div>
+    </div>`;
+  }
+  const q=currentQ(code); const total=r.order.length;
+  const picked=r.picked; const answered=picked!==null;
+  const choices=r.choiceOrder.map(ci=>{
+    const cls = answered ? (ci===q.answer?"correct":(ci===picked?"wrong":"")) : "";
+    return `<button class="choice ${cls}" data-ci="${ci}" ${answered?"disabled":""}>${esc(q.choices[ci])}</button>`;
+  }).join("");
+  const correct=answered&&picked===q.answer;
+  return `
+  <div class="row between"><a href="#part/${code}" class="small">← ${esc(p.title)}</a><span class="small muted">문항 ${r.idx+1} / ${total}</span></div>
+  <div class="progress mt-2"><i style="width:${Math.round(r.idx/total*100)}%"></i></div>
+  <div class="card mt-3" style="max-width:720px;margin-left:auto;margin-right:auto">
+    <span class="badge">${q.type==="ox"?"O / X":"4지선다"}</span>
+    <h2 class="mt-2">${esc(q.q)}</h2>
+    <div class="mt-3">${choices}</div>
+    ${answered?`<div class="explain mt-3 ${correct?"good":""}">
+        <b>${correct?"정답입니다.":"오답입니다."}</b>
+        <p class="mt-1">${esc(q.explain)}</p>
+        <p class="xs mt-1 muted">근거: ${esc(q.source)}</p>
+      </div>
+      <div class="row mt-3">${correct?`<button class="btn primary" id="btn-next">${r.idx+1<total?"다음 문항":"결과 보기"}</button>`:`<button class="btn primary" id="btn-retry">다시 풀기</button>`}</div>`:""}
+  </div>`;
+}
+function bindQuiz(code){
+  const run=store.get().quizRuns[code];
+  document.querySelectorAll(".choice:not(:disabled)").forEach(b=>{
+    b.onclick=()=>store.update(s=>{
+      const q=currentQ(code); run.picked=+b.dataset.ci;
+      const ok=run.picked===q.answer; if(!ok) run.wrongCount++;
+      s.log.push({ at:nowIso(), event:`퀴즈 ${q.id} ${ok?"정답":"오답"}`, part:code });
+    });
+  });
+  const nx=document.getElementById("btn-next"); if(nx) nx.onclick=()=>store.update(s=>{
+    run.idx++; run.picked=null; run.choiceOrder=null;
+    if(run.idx>=run.order.length){ run.passed=true; if(!prog(code).quiz){ prog(code).quiz=nowIso(); log("퀴즈 통과",code); } }
+  });
+  const rt=document.getElementById("btn-retry"); if(rt) rt.onclick=()=>store.update(()=>{ run.picked=null; run.choiceOrder=null; });  // 같은 문항 재출제(보기 재셔플)
+}
+
+/* =====================================================================
+   S4 마무리 (P6) · S5 완료
+   ===================================================================== */
+const FAQ=[
+  ["온보딩을 마치면 계약은 언제부터 시작되나요?","온보딩 최종 완료일을 기준으로 계약 기준일이 정해집니다. 커트라인은 운영 확정 후 안내드립니다. {{CONTRACT_CUTOFF}}"],
+  ["내 레벨과 시급은 어디서 확인하나요?","강사 포털에 로그인한 뒤 「내 자격」 메뉴에서 본인 기준만 확인하실 수 있습니다. 허브와 영상에는 금액 정보를 싣지 않습니다."],
+  ["경비는 어떻게 신청하나요?","교육 투입 전에 Slack 경비 사전 신청 워크플로로 신청하고, 마지막 투입일 기준 7일 이내에 증빙을 제출합니다. 사전 신청이 없으면 정액으로 처리됩니다."],
+  ["확정된 교육 일정에 문제가 생기면 어떻게 하나요?","담당 매니저에게 즉시 공유해 주세요. 교육 시작 5영업일 이내 취소는 누적 3회 이상이면 해지·발주 중단 검토 대상입니다."],
+  ["정산 때마다 어떤 서류를 내나요?","프리랜서는 매번 제출할 서류가 없습니다(최초 구글폼 1회). 사업자는 거래명세서(날인)와 세금계산서를 Slack 워크플로 「사업자 강의료 증빙 제출」로 제출합니다."],
+  ["교육 현장 사진을 SNS에 올려도 되나요?","담당 매니저에게 공개 가능 여부와 범위를 먼저 승인받아야 합니다. 가림 처리를 해도 특정이 가능하면 게시할 수 없습니다."],
+  ["운영 문서가 바뀌면 다시 온보딩을 해야 하나요?","아니요. 바뀐 내용만 허브 「변경사항」에 숙지 항목으로 올라오며, 「확인했습니다」를 누르면 기록됩니다. 필수 항목은 확인 전까지 진행이 막힙니다."],
+  ["궁금한 점은 어디에 물어보나요?","강사 포털 문의 메뉴 또는 Slack 담당 매니저 채널을 이용해 주세요. 월 1회 신규 합류자 Q&A 오피스아워(선택)도 운영합니다."],
+];
+// [제목, 설명, URL]. URL이 비어 있으면 「링크 확정 예정」 배지.
+const QUICK=[
+  ["강사 포털(교무실)","내 자격 · 내 일정 · 배정 교육 · 내 계약(명세서) · 문의", PLACEHOLDERS.PORTAL_URL],
+  ["Slack 워크플로 제출 가이드","사업자 강의료 증빙 · 경력증명서 · 계약서 발송 요청 작성법", DOCS["슬랙 워크플로 제출 가이드"].url],
+  ["Slack 주강사풀 채널","강사용 워크플로 제출 위치", LINKS.slackInstructor],
+  ["Slack 기술튜터풀 채널","보조강사용 워크플로 제출 위치", LINKS.slackTutor],
+  ["거래명세서 양식","사업자 정산 시 날인 후 PDF 제출", LINKS.invoiceForm],
+  ["최초 1회 구글폼","계약서·인건비 지급을 위한 개인 정보 수집 (담당자명 '이다은')", LINKS.firstForm],
+  ["문의 방법","포털 문의 메뉴 (일정/배정 · 계약/정산 · 계정/권한 · 기타)", DOCS["문의 방법"].url],
+  ["계약·재계약·온보딩 안내","계약 단위 · 갱신 기준 · 발주서", DOCS["[공지사항] AX교육팀 계약·재계약·온보딩 안내"].url],
+  ["경비(교통·숙박) 안내","정액/실비 기준 · 사전 신청 절차 · 지역별 금액표(원본에서만)", DOCS["[공지사항] AX교육팀 경비(교통·숙박) 안내"].url],
+  ["활동 제한 및 계약 해지 기준","일정 이행 · 보수 정보 비공개 · 보안", DOCS["강사·기술튜터 활동 제한 및 계약 해지 기준"].url],
+  ["강사 플레이북","교안 · 오리엔테이션 · 강의 스타일 · 체크리스트", DOCS["팀스파르타 강사 플레이북"].url],
+  ["기술튜터 플레이북","책임과 의무 · 단계별 체크리스트 · 현장 실전 가이드", DOCS["팀스파르타 기술튜터 플레이북"].url],
+  ["정산 절차","프리랜서 / 사업자 정산 · 명세서 이의제기", DOCS["강사·기술튜터 정산 절차"].url],
+];
+function viewFinal(){
+  const s=store.get(); const t=track().filter(c=>c!=="P6"); const ready=allPartsDone();
+  return `
+  <a href="#home" class="small">← 내 트랙</a>
+  <div class="card mt-2">
+    <span class="badge">P6</span>
+    <h1 class="mt-2">마무리 — 요약 · 퀵링크 · 최종 완료</h1>
+    <p class="muted mt-2">지금까지 배운 내용을 한 번 더 훑어보시고, 아래 버튼으로 온보딩을 마무리해 주세요.</p>
+  </div>
+  <h2 class="mt-4">파트별 핵심 요약</h2>
+  <div class="grid grid-2 mt-2">${t.map(c=>{ const p=partByCode(c); return `<div class="card flat"><div class="row between"><b>${esc(c)} · ${esc(p.title)}</b>${partDone(c)?`<span class="badge ok">완료</span>`:`<span class="badge lock">미완료</span>`}</div><ul class="small mt-2">${p.summary.slice(0,3).map(x=>`<li>${withTbd(x)}</li>`).join("")}</ul></div>`; }).join("")}</div>
+  <h2 class="mt-4">퀵링크</h2>
+  <div class="grid grid-3 mt-2">${QUICK.map(([a,b,url])=> url
+      ? `<a class="quick" href="${esc(url)}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><b>${esc(a)} ↗</b><span>${esc(b)}</span></a>`
+      : `<div class="quick"><b>${esc(a)}</b><span>${esc(b)}</span><span>${tbd("링크")}</span></div>`).join("")}</div>
+  <h2 class="mt-4">자주 묻는 질문</h2>
+  <div class="mt-2">${FAQ.map(([q,a])=>`<details><summary>${esc(q)}</summary><div class="body">${withTbd(a)}</div></details>`).join("")}</div>
+  <div class="card mt-5" style="text-align:center">
+    ${s.finalAt?`<div class="pass">🏁 온보딩 최종 완료 · ${fmt(s.finalAt)}</div><p class="muted small mt-2">강사 플랫폼에 완료 일자가 기록되었습니다.</p><a class="btn mt-3" href="#done">완료 화면 보기</a>`:
+    `<h2>온보딩 최종 완료</h2>
+     <p class="muted small mt-2">${ready?"모든 파트를 마치셨습니다. 아래 버튼을 누르면 완료 일시가 강사 관리 플랫폼에 기록되고, 계약서 발송과 교육 배정이 가능해집니다.":"아직 완료하지 않은 파트가 있습니다. 모든 파트를 마치면 버튼이 활성화됩니다."}</p>
+     <button class="btn primary lg mt-3" id="btn-final" ${ready?"":"disabled"}>온보딩 최종 완료</button>`}
+  </div>`;
+}
+function bindFinal(){
+  const b=document.getElementById("btn-final"); if(!b) return;
+  b.onclick=async()=>{
+    if(!allPartsDone()) return;
+    const s=store.get(); const at=nowIso();
+    b.disabled=true; b.textContent="기록 중…";
+    await platformApi.recordCompletion(s.member, at);
+    store.update(st=>{ st.finalAt=at; st.onboarded_at=at; st.log.push({at, event:"온보딩 최종 완료 (플랫폼 기록)", part:"P6"}); });
+    go("#done");
+  };
+}
+function viewDone(){
+  const s=store.get();
+  return `
+  <div class="card" style="max-width:640px;margin:0 auto;text-align:center">
+    <div style="font-size:56px">🎉</div>
+    <h1 class="mt-2">온보딩을 모두 마치셨습니다</h1>
+    <p class="muted mt-2">${esc(s.member.name)} 님, 수고 많으셨습니다.</p>
+    <div class="card flat mt-4" style="background:var(--surface-2);text-align:left">
+      <dl class="kv">
+        <dt>완료 일시</dt><dd><b>${fmt(s.finalAt)}</b></dd>
+        <dt>기록</dt><dd>강사 플랫폼에 온보딩 완료 일자가 기록되었습니다.</dd>
+        <dt>계약 기준일</dt><dd>완료일 기준으로 정해집니다. ${tbd("CONTRACT_CUTOFF")}</dd>
+      </dl>
+    </div>
+    <h3 class="mt-4" style="text-align:left">다음 할 일</h3>
+    <ol class="mt-2 small" style="text-align:left">
+      <li><b>계약서 대기</b> — 담당 매니저가 계약서를 발송합니다. Slack과 포털 알림을 확인해 주세요.</li>
+      <li><b>공고 지원</b> — 강사 포털의 교육 공고에서 일정이 맞는 교육에 지원하실 수 있습니다. 발주서는 포털에서 확인합니다.</li>
+      <li><b>포털 정보 최신 유지</b> — 교육 가능 일정·연락처·정산 정보가 바뀌면 바로 갱신해 주세요.</li>
+    </ol>
+    <div class="row mt-4" style="justify-content:center"><a class="btn primary" href="#home">내 트랙으로</a><a class="btn" href="#changes">변경사항 보기</a></div>
+  </div>`;
+}
+
+/* =====================================================================
+   S6 변경사항 (기존 회원용 변경 숙지)
+   ===================================================================== */
+function viewChanges(){
+  const s=store.get(); const items=visibleAcks();
+  const render1 = a => {
+    const done=s.acks[a.id]; const opened=(s.ackOpened||{})[a.id];
+    return `<div class="card ${a.severity==="required"&&!done?"":"flat"}" style="${a.severity==="required"&&!done?"border-color:var(--brand)":""}">
+      <div class="row between">
+        <div class="row"><span class="badge ${a.severity==="required"?"brand":""}">${a.severity==="required"?"필수":"일반"}</span><span class="badge">${a.audience==="all"||a.audience==="existing"?"전원":a.audience==="instructor"?"강사":"보조강사"}</span><span class="xs muted">게시 ${esc(a.publish_from)}</span></div>
+        ${done?`<span class="badge ok">확인 완료 ${fmt(done)}</span>`:""}
+      </div>
+      <h3 class="mt-2">${esc(a.title)}</h3>
+      <ul class="small mt-2">${a.summary.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>
+      <div class="row mt-3">
+        <a class="btn sm" href="${esc((DOCS[a.doc]||{}).url||"#")}" ${(DOCS[a.doc]||{}).url?'target="_blank" rel="noopener"':""} data-open="${a.id}">원본 문서: ${esc(a.doc)} ↗</a>
+        ${done?"":`<button class="btn sm primary" data-ack="${a.id}" ${a.severity==="required"&&!opened?"disabled title='원본 문서를 먼저 열어 주세요'":""}>확인했습니다</button>`}
+        ${a.severity==="required"&&!done&&!opened?`<span class="xs muted">필수 항목은 원본 문서를 연 뒤 확인할 수 있습니다.</span>`:""}
+      </div>
+    </div>`;
+  };
+  const pend=items.filter(a=>!s.acks[a.id]); const done=items.filter(a=>s.acks[a.id]);
+  return `
+  <div class="card">
+    <span class="badge brand">변경사항</span>
+    <h1 class="mt-2">운영 문서 변경 숙지</h1>
+    <p class="muted mt-2">온보딩 완료일(${fmt(s.onboarded_at)}) 이후에 게시된 변경사항만 표시됩니다. 「확인했습니다」를 누르면 확인 일시가 기록됩니다. 필수 항목은 확인 전까지 파트 진입이 막힙니다.</p>
+  </div>
+  <h2 class="mt-4">미확인 ${pend.length}건</h2>
+  <div class="grid mt-2">${pend.length?pend.map(render1).join(""):`<div class="card flat muted small">확인할 변경사항이 없습니다.</div>`}</div>
+  ${done.length?`<h2 class="mt-4">확인 완료 ${done.length}건</h2><div class="grid mt-2">${done.map(render1).join("")}</div>`:""}
+  <p class="xs faint mt-3">2단계에서는 같은 항목이 교무실(강사 플랫폼) 로그인 시 팝업으로도 표시될 예정입니다. 일반 변경은 주 1회 묶음 게시, 필수 변경만 즉시 게시합니다.</p>`;
+}
+function bindChanges(){
+  document.querySelectorAll("[data-open]").forEach(a=>a.onclick=(e)=>{ if(a.getAttribute("href")==="#") e.preventDefault(); store.update(s=>{ s.ackOpened=s.ackOpened||{}; s.ackOpened[a.dataset.open]=true; }); toast("원본 문서 열람이 기록되었습니다."); });
+  document.querySelectorAll("[data-ack]").forEach(b=>b.onclick=()=>store.update(s=>{ s.acks[b.dataset.ack]=nowIso(); s.log.push({at:nowIso(), event:`변경사항 확인 ${b.dataset.ack}`, part:null}); toast("확인이 기록되었습니다."); }));
+}
+
+/* =====================================================================
+   A1 어드민 목업 · A2 변경 숙지 관리 목업
+   ===================================================================== */
+function dummyTimeline(m){
+  const t=buildTrack(m.role,m.settle); const items=[{at:`${m.issued} 10:00`, label:"링크 발급"}];
+  const totalSteps=t.filter(c=>c!=="P6").length*4; let left=Math.round(totalSteps*m.progress);
+  const base=new Date(m.issued+"T11:00:00");
+  for(const c of t){ if(c==="P6") break; for(const k of ["video","doc","quiz","checklist"]){ if(left<=0) return items.concat([{pending:true,label:`${c} ${STEP_NAMES[k]} (대기)`}]); base.setMinutes(base.getMinutes()+7); items.push({at:fmt(base.toISOString()), label:`${c} ${STEP_NAMES[k]}`}); left--; } }
+  if(m.done) items.push({at:`${m.done} 16:20`, label:"온보딩 최종 완료 (플랫폼 기록)"});
+  return items;
+}
+function viewAdmin(tab){
+  tab=tab||"members"; const s=store.get();
+  const me = s.member ? [{ name:`${s.member.name} (이 세션)`, role:s.member.role, settle:s.member.settle, issued:s.member.issued_at.slice(0,10), done:s.finalAt?s.finalAt.slice(0,10):null, progress:overall().pct/100, last:s.log.length?fmt(s.log[s.log.length-1].at):"-", live:true }] : [];
+  const rows=me.concat(DUMMY_MEMBERS);
+  const sel = s.adminSel ?? 0;
+  const m=rows[sel]; const dIssued = r => Math.max(0, Math.round((new Date(todayStr())-new Date(r.issued))/86400000));
+  const members=`
+    <div class="grid" style="grid-template-columns:1.4fr 1fr;gap:14px" id="admin-grid">
+      <div class="card">
+        <div class="row between"><h3>인원 현황</h3><div class="row"><button class="btn sm" onclick="return false" title="목업">링크 발급</button><button class="btn sm" onclick="return false" title="목업">미완료자 리마인드 대상 추출</button></div></div>
+        <div class="tablewrap mt-2"><table>
+          <tr><th>이름</th><th>역할</th><th>정산</th><th>진행률</th><th>완료일</th><th>마지막 활동</th><th>리마인드</th></tr>
+          ${rows.map((r,i)=>`<tr class="clickable ${i===sel?"sel":""}" data-i="${i}" style="${i===sel?"background:var(--surface-2)":""}">
+            <td><b>${esc(r.name)}</b></td><td>${ROLE_LABEL[r.role]}</td><td>${SETTLE_LABEL[r.settle]}</td>
+            <td><div class="progress" style="width:80px;height:7px"><i style="width:${Math.round(r.progress*100)}%"></i></div><span class="xs muted">${Math.round(r.progress*100)}%</span></td>
+            <td>${r.done?`<span class="badge ok">${esc(r.done)}</span>`:`<span class="badge lock">미완료</span>`}</td>
+            <td class="small muted">${esc(r.last)}</td>
+            <td>${!r.done&&dIssued(r)>=7?`<span class="badge brand">D+7</span>`:!r.done&&dIssued(r)>=3?`<span class="badge warn">D+3</span>`:"-"}</td>
+          </tr>`).join("")}
+        </table></div>
+      </div>
+      <div class="card">
+        <h3>${esc(m.name)} · 단계별 타임라인</h3>
+        <p class="xs muted mt-1">${ROLE_LABEL[m.role]} · ${SETTLE_LABEL[m.settle]} · 발급 ${esc(m.issued)}</p>
+        <ul class="timeline mt-3 small">
+          ${m.live ? (s.log.length?s.log.map(l=>`<li><span class="muted xs">${fmt(l.at)}</span><br>${esc(l.event)}${l.part?` <span class="badge xs">${esc(l.part)}</span>`:""}</li>`).join(""):`<li class="pending">아직 활동이 없습니다.</li>`)
+                   : dummyTimeline(m).map(x=>`<li class="${x.pending?"pending":""}">${x.at?`<span class="muted xs">${esc(x.at)}</span><br>`:""}${esc(x.label)}</li>`).join("")}
+        </ul>
+      </div>
+    </div>
+    <div class="card flat mt-3">
+      <h3>퀴즈 문항 관리 <span class="badge xs">목업</span></h3>
+      <p class="small muted mt-1">문항 ${QUIZ.length}개 · 파트 ${PARTS.length}개. 실서비스에서는 문항 풀(JSON)을 이 화면에서 수정하고 챕터문제.md와 동기화합니다. 파트를 펼치면 전체 문항·보기·정답·해설을 볼 수 있습니다.</p>
+      <div class="mt-2">
+        ${PARTS.filter(p=>p.code!=="P6").map(p=>{ const qs=quizOf(p.code); return `<details><summary><span>${esc(p.code)} ${esc(p.title)}</span><span class="badge">${qs.length}문항 · 4지선다 ${qs.filter(q=>q.type==="mc").length} · OX ${qs.filter(q=>q.type==="ox").length}</span></summary><div class="body"><ul class="qlist">${qs.map(q=>`<li><b>${esc(q.id)}</b> ${esc(q.q)}${q.choices.map((c,i)=>`<div class="ch">${i===q.answer?`<span class="ans">✓ ${esc(c)}</span>`:esc(c)}</div>`).join("")}<div class="ch">해설: ${esc(q.explain)} <span class="faint">· 근거: ${esc(q.source)}</span></div></li>`).join("")}</ul></div></details>`; }).join("")}
+      </div>
+    </div>`;
+  const acks=allAckItems();
+  const ackTab=`
+    <div class="grid" style="grid-template-columns:1fr 1.3fr;gap:14px" id="admin-grid">
+      <div class="card">
+        <h3>숙지 항목 등록</h3>
+        <form id="form-ack" class="mt-2">
+          <label class="f">제목</label><input type="text" name="title" required placeholder="예: 경비 안내 문구 정리">
+          <label class="f mt-2">변경 요약 (한 줄에 하나, 3줄)</label><textarea name="summary" required placeholder="무엇이 바뀌었는지&#10;언제부터 적용되는지&#10;무엇을 하면 되는지"></textarea>
+          <label class="f mt-2">원본 문서명</label><input type="text" name="doc" required placeholder="예: 팀스파르타 강사 플레이북">
+          <div class="grid grid-2 mt-2">
+            <div><label class="f">대상</label><select name="audience"><option value="all">전체</option><option value="existing">기존 회원</option><option value="instructor">강사만</option><option value="tutor">보조강사만</option></select></div>
+            <div><label class="f">중요도</label><select name="severity"><option value="normal">일반 (나중에 보기 가능)</option><option value="required">필수 (확인 전 진행 차단)</option></select></div>
+            <div><label class="f">게시 시작</label><input type="date" name="from" value="${todayStr()}"></div>
+            <div><label class="f">게시 종료</label><input type="date" name="until"></div>
+          </div>
+          <button class="btn primary mt-3" type="submit">즉시 게시</button>
+          <p class="xs faint mt-2">초안에서는 메모리에만 저장됩니다. 신규 온보딩 파트를 추가하면 "대상 전체 · 필수" 항목을 자동 생성하는 옵션이 실서비스에 들어갑니다.</p>
+        </form>
+      </div>
+      <div class="card">
+        <h3>항목별 확인 현황</h3>
+        <div class="tablewrap mt-2"><table>
+          <tr><th>제목</th><th>대상</th><th>중요도</th><th>게시</th><th>확인률</th></tr>
+          ${acks.map((a,i)=>{ const base=[[12,20],[9,14]][i]||[0,0]; const mine=store.get().acks[a.id]?1:0; const vis=visibleAcks().some(v=>v.id===a.id)?1:0; const n=base[0]+mine, d=base[1]+vis; return `<tr><td><b>${esc(a.title)}</b><br><span class="xs muted">${esc(a.doc)}</span></td><td>${a.audience==="all"?"전체":a.audience==="existing"?"기존":a.audience==="instructor"?"강사":"보조강사"}</td><td>${a.severity==="required"?`<span class="badge brand">필수</span>`:`<span class="badge">일반</span>`}</td><td class="xs muted">${esc(a.publish_from)}${a.publish_until?`<br>~ ${esc(a.publish_until)}`:""}</td><td><b>${d?Math.round(n/d*100):0}%</b> <span class="xs muted">${n}/${d}</span><br><a href="#" onclick="return false" class="xs">미확인자 추출</a></td></tr>`; }).join("")}
+        </table></div>
+        <div class="banner warn mt-3 small"><b>2단계</b> 같은 항목을 교무실(강사 플랫폼) 로그인 시 팝업으로 확장합니다. 차단 범위(전체 메인 vs 배정·공고 메뉴만)는 플랫폼 협의 후 확정합니다. ${tbd("ACK_POPUP_SCOPE")}</div>
+      </div>
+    </div>`;
+  return `
+  <div class="banner warn small"><b>어드민 목업</b><span>실서비스에서는 개인 계정 로그인과 권한 체계가 적용됩니다. 이 화면은 구조 확인용이며 로그인 폼을 흉내 내지 않습니다.</span></div>
+  <div class="row between mt-3"><h1>어드민</h1><span class="xs muted">AX교육팀 전용</span></div>
+  <div class="tabs mt-3"><button class="${tab==="members"?"active":""}" data-tab="members">인원·진행 현황 (A1)</button><button class="${tab==="ack"?"active":""}" data-tab="ack">변경 숙지 관리 (A2)</button></div>
+  ${tab==="ack"?ackTab:members}
+  <style>@media (max-width:860px){#admin-grid{grid-template-columns:1fr!important}}</style>`;
+}
+function bindAdmin(){
+  document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>go(`#admin/${b.dataset.tab}`));
+  document.querySelectorAll("tr.clickable").forEach(tr=>tr.onclick=()=>store.update(s=>{ s.adminSel=+tr.dataset.i; }));
+  const f=document.getElementById("form-ack"); if(f) f.onsubmit=(e)=>{
+    e.preventDefault(); const fd=new FormData(f);
+    const item={ id:`ack-${Date.now()}`, title:fd.get("title"), severity:fd.get("severity"), audience:fd.get("audience"), summary:String(fd.get("summary")).split("\n").map(x=>x.trim()).filter(Boolean).slice(0,3), doc:fd.get("doc"), publish_from:fd.get("from")||todayStr(), publish_until:fd.get("until")||"" };
+    store.update(s=>{ s.adminAcks=s.adminAcks||[]; s.adminAcks.push(item); });
+    toast("숙지 항목을 게시했습니다. (메모리 저장)");
+  };
+}
+
+/* ---------- 시작 ---------- */
+render();
+</script>
+</body>
+</html>
